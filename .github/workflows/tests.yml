@@ -1,0 +1,58 @@
+# Tests of the sc-starter tool on the three systems people use it from.
+# Actions are pinned to a commit, with the version in a comment, so that a
+# moved tag cannot change what runs here.
+name: tests
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python: ["3.12"]
+        include:
+          # `uv tool install` in the guides takes the newest Python uv finds.
+          - os: ubuntu-latest
+            python: "3.15"
+    runs-on: ${{ matrix.os }}
+    env:
+      UV_PYTHON: ${{ matrix.python }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # The token stays out of the working folder; no step needs it.
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        with:
+          version: "0.13.4"
+      - run: uv sync --locked
+      - run: uv run ruff format --check
+      - run: uv run ruff check
+      - run: uv run pytest
+      - run: uv run vulture
+      # The examples' lock files still match their pyproject.toml.
+      - if: matrix.os == 'ubuntu-latest' && matrix.python == '3.12'
+        run: |
+          for project in examples/python/*/pyproject.toml first-jobs/*/pyproject.toml; do
+            uv lock --check --directory "$(dirname "$project")"
+          done
+
+  # The website builds from the guide, and every link in it leads somewhere.
+  site:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # The token stays out of the working folder; no step needs it.
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        with:
+          version: "0.13.4"
+      - run: uv run --locked --group docs site/build.py

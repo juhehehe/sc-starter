@@ -1,0 +1,568 @@
+/* The look of the website: Gruvbox tones, Fraunces for headings, Literata
+   for text, JetBrains Mono for code. build.py fetches the fonts.
+
+   Colours have one role each, in text and in code alike:
+     structure   links, navigation, section headings; keywords in code
+     value       strings and numbers in code
+     secondary   captions, output, comments in code
+   and the boxes have a tone of their own: check, warning, danger, and a
+   neutral one for note, "If it didn't work" and "Behind the scenes". A box
+   is never told apart by its colour alone; each has its own icon and title. */
+
+@font-face {
+  font-family: "Literata";
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url("../fonts/literata-latin-opsz-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Literata";
+  font-style: italic;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url("../fonts/literata-latin-opsz-italic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Fraunces";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("../fonts/fraunces-latin-opsz-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url("../fonts/jetbrains-mono-latin-wght-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: italic;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url("../fonts/jetbrains-mono-latin-wght-italic.woff2") format("woff2");
+}
+
+:root {
+  --md-text-font: "Literata";
+  --md-code-font: "JetBrains Mono";
+  --sc-heading-font: "Fraunces", Georgia, serif;
+
+  /* Icons from Lucide (ISC licence), as Zensical ships them. */
+  --sc-icon-check: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m16 9-5.5 5.5L8 12"/></svg>');
+  --sc-icon-fix: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z"/></svg>');
+  --sc-icon-behind: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M11 10.27 7 3.34M11 13.73l-4 6.93M12 22v-2M12 2v2M14 12h8M17 20.66l-1-1.73M17 3.34l-1 1.73M2 12h2M20.66 17l-1.73-1M20.66 7l-1.73 1M3.34 17l1.73-1M3.34 7l1.73 1"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="12" r="8"/></svg>');
+  --sc-icon-note: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>');
+  --sc-icon-warning: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3M12 9v4M12 17h.01"/></svg>');
+  --sc-icon-danger: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M12 16h.01M12 8v4M15.312 2a2 2 0 0 1 1.414.586l4.688 4.688A2 2 0 0 1 22 8.688v6.624a2 2 0 0 1-.586 1.414l-4.688 4.688a2 2 0 0 1-1.414.586H8.688a2 2 0 0 1-1.414-.586l-4.688-4.688A2 2 0 0 1 2 15.312V8.688a2 2 0 0 1 .586-1.414l4.688-4.688A2 2 0 0 1 8.688 2z"/></svg>');
+  --sc-icon-computer: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8M12 17v4"/></svg>');
+  --sc-icon-cluster: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><path d="M6 6h.01M6 18h.01"/></svg>');
+  --sc-icon-file: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5M10 9H8M16 13H8M16 17H8"/></svg>');
+  --sc-icon-output: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="m15 10 5 5-5 5"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></svg>');
+  --sc-icon-time: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>');
+  --sc-icon-waiting: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M5 22h14M5 2h14M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg>');
+}
+
+/* Light: Gruvbox light tones on white paper. */
+[data-md-color-scheme="gruvbox-light"] {
+  --sc-text: #3c3836;
+  --sc-structure: #076678;
+  --sc-value: #79740e;
+  --sc-secondary: #665c54;
+  --sc-paper: #ffffff;
+  --sc-surface: #faf8f3;
+  --sc-rule: #e6dcc8;
+  --sc-check: #427b58;
+  --sc-warning: #af3a03;
+  --sc-danger: #9d0006;
+  --sc-neutral: #928374;
+
+  --md-default-fg-color: var(--sc-text);
+  --md-default-fg-color--light: var(--sc-secondary);
+  --md-default-fg-color--lighter: #3c383652;
+  --md-default-fg-color--lightest: #3c383614;
+  --md-default-bg-color: var(--sc-paper);
+  --md-default-bg-color--light: #ffffffd9;
+  --md-default-bg-color--lighter: #ffffff4d;
+  --md-default-bg-color--lightest: #ffffff1f;
+  --md-primary-fg-color: var(--sc-structure);
+  --md-primary-fg-color--light: #0b7d93;
+  --md-primary-fg-color--dark: #054f5d;
+  --md-primary-bg-color: var(--sc-paper);
+  --md-primary-bg-color--light: #ffffffb3;
+  --md-accent-fg-color: var(--sc-structure);
+  --md-accent-fg-color--transparent: #0766781a;
+  --md-accent-bg-color: var(--sc-paper);
+  --md-typeset-mark-color: #fabd2f59;
+  --md-typeset-table-color: var(--sc-rule);
+  --md-typeset-table-color--light: #faf8f3;
+
+  --color-foreground: 60 56 54;
+  --color-background: 255 255 255;
+  --color-background-subtle: 250 248 243;
+  --color-backdrop: 255 255 255;
+}
+
+/* Dark: Gruvbox dark. */
+[data-md-color-scheme="gruvbox-dark"] {
+  color-scheme: dark;
+  --sc-text: #ebdbb2;
+  --sc-structure: #83a598;
+  --sc-value: #b8bb26;
+  --sc-secondary: #a89984;
+  --sc-paper: #282828;
+  --sc-surface: #32302f;
+  --sc-rule: #504945;
+  --sc-check: #8ec07c;
+  --sc-warning: #fe8019;
+  --sc-danger: #fb4934;
+  --sc-neutral: #928374;
+
+  --md-default-fg-color: var(--sc-text);
+  --md-default-fg-color--light: var(--sc-secondary);
+  --md-default-fg-color--lighter: #ebdbb252;
+  --md-default-fg-color--lightest: #ebdbb21a;
+  --md-default-bg-color: var(--sc-paper);
+  --md-default-bg-color--light: #282828d9;
+  --md-default-bg-color--lighter: #2828284d;
+  --md-default-bg-color--lightest: #2828281f;
+  --md-primary-fg-color: var(--sc-structure);
+  --md-primary-fg-color--light: #9dbbae;
+  --md-primary-fg-color--dark: #6a8f81;
+  --md-primary-bg-color: var(--sc-paper);
+  --md-primary-bg-color--light: #282828b3;
+  --md-accent-fg-color: var(--sc-structure);
+  --md-accent-fg-color--transparent: #83a5981f;
+  --md-accent-bg-color: var(--sc-paper);
+  --md-typeset-mark-color: #fabd2f40;
+  --md-typeset-table-color: var(--sc-rule);
+  --md-typeset-table-color--light: #32302f;
+
+  --color-foreground: 235 219 178;
+  --color-background: 40 40 40;
+  --color-background-subtle: 50 48 47;
+  --color-backdrop: 40 40 40;
+}
+
+/* Both schemes: what follows from the tones above. */
+[data-md-color-scheme^="gruvbox"] {
+  --md-typeset-color: var(--sc-text);
+  --md-typeset-a-color: var(--sc-structure);
+  --md-admonition-fg-color: var(--sc-text);
+  --md-admonition-bg-color: var(--sc-paper);
+
+  --md-code-fg-color: var(--sc-text);
+  --md-code-bg-color: var(--sc-surface);
+  --md-code-bg-color--light: var(--sc-surface);
+  --md-code-bg-color--lighter: var(--sc-surface);
+  --md-code-hl-color: var(--sc-structure);
+  --md-code-hl-color--light: var(--md-accent-fg-color--transparent);
+  --md-code-hl-keyword-color: var(--sc-structure);
+  --md-code-hl-function-color: var(--sc-structure);
+  --md-code-hl-string-color: var(--sc-value);
+  --md-code-hl-number-color: var(--sc-value);
+  --md-code-hl-constant-color: var(--sc-value);
+  --md-code-hl-special-color: var(--sc-value);
+  --md-code-hl-comment-color: var(--sc-secondary);
+  --md-code-hl-name-color: var(--sc-text);
+  --md-code-hl-operator-color: var(--sc-text);
+  --md-code-hl-punctuation-color: var(--sc-text);
+  --md-code-hl-generic-color: var(--sc-secondary);
+  --md-code-hl-variable-color: var(--sc-text);
+
+  --md-mermaid-font-family: var(--md-text-font-family);
+  --md-mermaid-edge-color: var(--sc-secondary);
+  --md-mermaid-node-bg-color: var(--sc-surface);
+  --md-mermaid-node-fg-color: var(--sc-text);
+  --md-mermaid-label-bg-color: var(--sc-paper);
+  --md-mermaid-label-fg-color: var(--sc-secondary);
+}
+
+body {
+  background-color: var(--sc-paper);
+}
+
+/* Text: 17 px Literata, lines of about 75 characters. */
+.md-typeset {
+  font-size: 0.85rem;
+  line-height: 1.65;
+  letter-spacing: 0;
+  font-optical-sizing: auto;
+}
+.md-content__inner {
+  max-width: 35rem;
+}
+.md-typeset p,
+.md-typeset ul,
+.md-typeset ol {
+  margin-block: 0 1em;
+}
+
+/* Headings in Fraunces; section headings carry the structure colour. */
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-header__title,
+.md-typeset .home-hero h1 {
+  font-family: var(--sc-heading-font);
+  font-optical-sizing: auto;
+  letter-spacing: -0.01em;
+}
+.md-typeset h1 {
+  margin-bottom: 0.8em;
+  font-size: 2em;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--sc-text);
+}
+.md-typeset h2 {
+  margin: 2em 0 0.6em;
+  font-size: 1.45em;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--sc-structure);
+}
+.md-typeset h3 {
+  margin: 2.2em 0 0.6em;
+  font-size: 1.15em;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.md-typeset h4 {
+  font-size: 1em;
+  font-weight: 700;
+}
+.md-typeset .headerlink {
+  color: var(--sc-rule);
+}
+
+/* Links: the structure colour, underlined only on hover. */
+.md-typeset a {
+  color: var(--sc-structure);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--sc-structure) 35%, transparent);
+  text-underline-offset: 0.18em;
+}
+.md-typeset a:hover {
+  text-decoration-color: currentColor;
+}
+
+/* Terms from the glossary: a dotted line, the entry as a tooltip. */
+.md-typeset abbr {
+  border-bottom: 0.05rem dotted var(--sc-neutral);
+}
+.md-typeset :is(h1, h2, h3, h4, a, .admonition-title, summary) abbr {
+  border-bottom: none;
+  cursor: inherit;
+}
+
+/* Inline code. */
+.md-typeset code {
+  font-size: 0.85em;
+  font-variant-ligatures: none;
+}
+/* Quiet, since prose often names several commands and files. */
+.md-typeset :not(pre) > code {
+  padding: 0.05em 0.25em;
+  color: var(--sc-text);
+  background-color: var(--sc-surface);
+  border: none;
+  border-radius: 0.2rem;
+}
+.md-typeset pre > code {
+  font-size: 0.82em;
+  line-height: 1.55;
+}
+.md-typeset .highlight .c,
+.md-typeset .highlight .c1,
+.md-typeset .highlight .cm {
+  font-style: italic;
+}
+
+/* Code blocks say where they belong: the title names the place, an icon
+   repeats it. sc-starter.js sets the class from the title. */
+.md-typeset .highlight > .filename {
+  display: flex;
+  gap: 0.45em;
+  align-items: center;
+  padding: 0.45em 1em;
+  font-family: var(--md-text-font-family);
+  font-size: 0.8em;
+  font-weight: 600;
+  color: var(--sc-secondary);
+  border-bottom: 0.05rem solid var(--sc-rule);
+}
+.md-typeset .highlight > .filename::before {
+  flex: none;
+  width: 1.05em;
+  height: 1.05em;
+  content: "";
+  background-color: currentColor;
+  mask-image: var(--sc-icon-file);
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+}
+.md-typeset .where-computer > .filename::before {
+  mask-image: var(--sc-icon-computer);
+}
+.md-typeset .where-cluster > .filename::before {
+  mask-image: var(--sc-icon-cluster);
+}
+.md-typeset .where-output > .filename::before {
+  mask-image: var(--sc-icon-output);
+}
+.md-typeset .where-computer > .filename,
+.md-typeset .where-cluster > .filename {
+  color: var(--sc-text);
+}
+.md-typeset .where-file > .filename {
+  font-family: var(--md-code-font-family);
+  font-weight: 500;
+}
+
+/* The line at the head of a task page: a clock before the time your own
+   work takes, an hourglass before the time you wait for others. The
+   labels stay, small and quiet, so the icons are decoration; they differ
+   in shape, not only in colour. sc-starter.js builds the line. */
+.md-typeset p.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3em 1.6em;
+  font-size: 0.95em;
+}
+.md-typeset .meta > span::before {
+  display: inline-block;
+  width: 1.05em;
+  height: 1.05em;
+  margin-right: 0.45em;
+  vertical-align: -0.17em;
+  content: "";
+  background-color: var(--sc-secondary);
+  mask-image: var(--sc-icon-time);
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+}
+.md-typeset .meta > .meta-waiting::before {
+  mask-image: var(--sc-icon-waiting);
+}
+.md-typeset .meta-label {
+  margin-right: 0.35em;
+  font-size: 0.85em;
+  font-weight: 600;
+  color: var(--sc-secondary);
+}
+
+/* Output: what the computer answers. Not for typing, so no copy button,
+   and quieter than the commands. */
+.md-typeset .where-output {
+  --md-code-bg-color: var(--sc-paper);
+  --md-code-fg-color: var(--sc-secondary);
+}
+.md-typeset .where-output > .filename,
+.md-typeset .where-output pre > code {
+  background-color: var(--sc-paper);
+  color: var(--sc-secondary);
+}
+.md-typeset .where-output pre {
+  border: 0.05rem dashed var(--sc-rule);
+  border-top: none;
+  border-radius: 0 0 0.4rem 0.4rem;
+}
+.md-typeset .where-output > .filename {
+  border: 0.05rem dashed var(--sc-rule);
+  border-radius: 0.4rem 0.4rem 0 0;
+}
+.md-typeset .where-output .md-code__nav,
+.md-typeset .where-output .md-clipboard {
+  display: none;
+}
+
+/* Boxes: a thin line in the box's tone, its icon, its title word. The
+   text stays in the text colour. */
+.md-typeset .admonition,
+.md-typeset details {
+  --sc-tone: var(--sc-neutral);
+  --sc-icon: var(--sc-icon-note);
+  margin: 1.4em 0;
+  padding: 0 1em;
+  font-size: 0.95em;
+  color: var(--sc-text);
+  background-color: color-mix(in srgb, var(--sc-tone) 6%, transparent);
+  border: none;
+  border-left: 0.15rem solid var(--sc-tone);
+  border-radius: 0 0.3rem 0.3rem 0;
+  box-shadow: none;
+}
+.md-typeset .admonition-title,
+.md-typeset summary {
+  margin: 0 -1em;
+  padding: 0.6em 1em 0.6em 2.6em;
+  font-weight: 600;
+  color: var(--sc-text);
+  background: none;
+  border: none;
+}
+.md-typeset .admonition > .admonition-title + *,
+.md-typeset details > summary + * {
+  margin-top: 0;
+}
+.md-typeset .admonition > :last-child,
+.md-typeset details > :last-child {
+  margin-bottom: 0.8em;
+}
+.md-typeset .admonition-title::before,
+.md-typeset summary::before {
+  top: 0.75em;
+  left: 1em;
+  width: 1.1em;
+  height: 1.1em;
+  background-color: var(--sc-tone);
+  mask-image: var(--sc-icon);
+  -webkit-mask-image: var(--sc-icon);
+}
+.md-typeset summary::after {
+  top: 0.75em;
+  color: var(--sc-secondary);
+}
+
+.md-typeset .check {
+  --sc-tone: var(--sc-check);
+  --sc-icon: var(--sc-icon-check);
+}
+.md-typeset .fix {
+  --sc-icon: var(--sc-icon-fix);
+}
+.md-typeset .behind {
+  --sc-icon: var(--sc-icon-behind);
+}
+.md-typeset .warning {
+  --sc-tone: var(--sc-warning);
+  --sc-icon: var(--sc-icon-warning);
+}
+.md-typeset :is(.danger, .caution) {
+  --sc-tone: var(--sc-danger);
+  --sc-icon: var(--sc-icon-danger);
+}
+
+/* Tables: rules between rows, nothing around them. */
+.md-typeset table:not([class]) {
+  font-size: 0.92em;
+  line-height: 1.5;
+  border: none;
+  border-radius: 0;
+}
+.md-typeset table:not([class]) th {
+  font-weight: 600;
+  color: var(--sc-text);
+  background: none;
+  border-bottom: 0.08rem solid var(--sc-secondary);
+}
+.md-typeset table:not([class]) td {
+  border-top: 0.05rem solid var(--sc-rule);
+}
+.md-typeset table:not([class]) :is(th, td) {
+  padding: 0.55em 1.2em 0.55em 0;
+}
+.md-typeset table:not([class]) td code {
+  white-space: nowrap;
+}
+.md-typeset table:not([class]) tr:hover {
+  background: none;
+  box-shadow: none;
+}
+
+/* Diagrams. */
+.md-typeset .mermaid {
+  display: flex;
+  justify-content: center;
+  margin: 1.6em 0;
+}
+
+/* Header, navigation and footer. */
+.md-header {
+  color: var(--sc-text);
+  background-color: var(--md-default-bg-color--light);
+  border-bottom: 0.05rem solid var(--sc-rule);
+  box-shadow: none;
+}
+.md-header__title {
+  font-weight: 600;
+}
+.md-nav {
+  font-size: 0.75rem;
+}
+.md-footer,
+.md-footer-meta {
+  color: var(--sc-secondary);
+  background-color: var(--sc-paper);
+}
+.md-footer-meta {
+  border-top: 0.05rem solid var(--sc-rule);
+}
+.md-footer-meta a {
+  color: var(--sc-secondary);
+}
+.md-nav__item--section > .md-nav__link,
+.md-nav__title {
+  font-family: var(--sc-heading-font);
+  font-weight: 600;
+  color: var(--sc-text);
+}
+.md-nav__link--active,
+.md-nav__link--active:hover {
+  font-weight: 600;
+  color: var(--sc-structure);
+}
+
+/* The start page. */
+.md-typeset .home-hero {
+  margin: 1rem 0 2.4rem;
+}
+.md-typeset .home-hero h1 {
+  max-width: 18em;
+  margin-bottom: 0.5em;
+  font-size: 2.5em;
+  line-height: 1.12;
+}
+.md-typeset .home-hero p {
+  font-size: 1.12em;
+  line-height: 1.55;
+  color: var(--sc-secondary);
+}
+.md-typeset .grid.cards > :is(ul, ol) > li {
+  padding: 1em 1.1em;
+  background: none;
+  border: 0.05rem solid var(--sc-rule);
+  border-radius: 0.4rem;
+  box-shadow: none;
+}
+.md-typeset .grid.cards > :is(ul, ol) > li:hover {
+  border-color: var(--sc-secondary);
+}
+.md-typeset .grid.cards li > p:last-child {
+  margin-bottom: 0;
+}
+/* The way through the guide: numbered stations. */
+.md-typeset .stations > ol {
+  counter-reset: station;
+}
+.md-typeset .stations > ol > li {
+  counter-increment: station;
+}
+.md-typeset .stations > ol > li::before {
+  display: block;
+  margin-bottom: 0.2em;
+  font-family: var(--sc-heading-font);
+  font-size: 1.6em;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--sc-structure);
+  content: counter(station);
+}
+.md-main__inner:has(.home-hero) .md-content__inner {
+  max-width: 46rem;
+}

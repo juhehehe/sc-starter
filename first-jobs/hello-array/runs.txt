@@ -1,0 +1,3 @@
+echo "A model with 5 topics"
+echo "A model with 10 topics"
+echo "A model with 20 topics"

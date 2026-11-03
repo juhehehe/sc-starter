@@ -1,0 +1,51 @@
+[project]
+name = "sc-starter"
+version = "0.1.0"
+description = "Run Slurm jobs on the SC cluster of Leipzig University from your own computer"
+requires-python = ">=3.12"
+license = "MIT"
+# No dependencies on purpose: besides Python, the tool needs only the ssh
+# command that comes with Linux, macOS and Windows.
+dependencies = []
+
+[project.scripts]
+sc-starter = "sc_starter.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.12.10,<0.14"]
+build-backend = "uv_build"
+
+[tool.ruff.lint]
+# Listed explicitly, as the Ruff docs recommend; since Ruff 0.16 the default
+# set has over 400 rules. D: every module and function says in a docstring
+# what it does, in the style of PEP 257, also in the examples that readers
+# copy.
+select = ["E", "F", "UP", "B", "SIM", "I", "D"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "pep257"
+
+[tool.ruff.lint.per-file-ignores]
+# The name of a test says what it checks; a docstring is there only where
+# the name cannot say all.
+"tests/*" = ["D"]
+
+[tool.vulture]
+paths = ["src", "tests"]
+# pytest finds fixtures by their names, and tarfile reads what tests set.
+ignore_decorators = ["@pytest.fixture"]
+ignore_names = ["type"]
+
+[tool.pytest]
+testpaths = ["tests"]
+addopts = ["--import-mode=importlib"]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "ruff>=0.17.1",
+    "vulture>=2.16",
+]
+docs = [
+    "zensical==0.0.73",
+]

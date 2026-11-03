@@ -1,0 +1,14 @@
+#!/bin/sh
+# Stand-in for `sbatch --parsable`: takes the job and prints its job ID.
+# Job IDs count up from 28390001; each job leaves its arguments in
+# jobs/<job ID> in the folder LOCAL_CLUSTER_SLURM.
+for script; do :; done
+if [ ! -f "$script" ]; then
+    echo "sbatch: error: Unable to open file $script" >&2
+    exit 1
+fi
+jobs=$LOCAL_CLUSTER_SLURM/jobs
+mkdir -p "$jobs"
+job=$((28390001 + $(ls "$jobs" | wc -l)))
+echo "$*" > "$jobs/$job"
+echo "$job"

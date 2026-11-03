@@ -1,0 +1,6 @@
+python run.py 5
+python run.py 10
+python run.py 15
+python run.py 20
+python run.py 25
+python run.py 30

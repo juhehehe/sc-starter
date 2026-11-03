@@ -1,0 +1,163 @@
+# Settings of the website, built with Zensical by build.py next to this file.
+# The website is the main way to read the guide, so the pages in docs/ may
+# use what only it shows: boxes, tabs, tooltips. The README and the READMEs
+# of the examples stay plain GitHub Markdown. build.py copies all pages to
+# _src/.
+
+[project]
+site_name = "sc-starter"
+site_description = "Run your Python and R code on the SC cluster of Leipzig University from your own computer"
+docs_dir = "_src"
+site_dir = "_site"
+# Where GitHub Pages publishes the site, see .github/workflows/pages.yml.
+site_url = "https://juhehehe.github.io/sc-starter/"
+# The preview; 8000, Zensical's default, is often taken by another server.
+dev_addr = "127.0.0.1:8001"
+extra_css = ["assets/stylesheets/sc-starter.css"]
+# Served by the site itself, so that no page loads anything from elsewhere.
+extra_javascript = ["assets/mermaid.min.js", "assets/javascripts/sc-starter.js"]
+
+# The order of the guide: the basics with the setup, Slurm, your project on
+# the cluster, sc-starter, the code-alongs and the reference. Each section
+# starts with an overview page, and the arrows at the foot of each page
+# follow this order.
+nav = [
+  { "Start" = "index.md" },
+  { "Basics" = [
+    "docs/basics/README.md",
+    { "Set up your computer" = "docs/basics/setup.md" },
+    { "Working in the terminal" = "docs/basics/terminal.md" },
+    { "Working on the cluster" = "docs/basics/working-on-the-cluster.md" },
+  ] },
+  { "Slurm" = [
+    "docs/slurm/README.md",
+    { "How Slurm works" = "docs/slurm/how-slurm-works.md" },
+    { "Your first job" = "docs/slurm/first-job.md" },
+    { "R and Python in a job" = "docs/slurm/r-and-python.md" },
+    { "Many runs: job arrays" = "docs/slurm/job-arrays.md" },
+    { "Interactive jobs" = "docs/slurm/interactive-jobs.md" },
+    { "Choosing time and memory" = "docs/slurm/time-and-memory.md" },
+    { "Asking for a GPU" = "docs/slurm/gpu-jobs.md" },
+  ] },
+  { "Your project on the cluster" = [
+    "docs/project/README.md",
+    { "Copying files" = "docs/project/copying-files.md" },
+    { "Git" = "docs/project/git.md" },
+    { "Packages: uv and renv" = "docs/project/packages.md" },
+  ] },
+  { "sc-starter" = [
+    "docs/sc-starter/README.md",
+    { "Install sc-starter" = "docs/sc-starter/install.md" },
+    { "First jobs with sc-starter" = "docs/sc-starter/first-jobs.md" },
+    { "Working with sc-starter" = "docs/sc-starter/working-with-sc-starter.md" },
+    { "Bring your own project" = "docs/sc-starter/bring-your-own-project.md" },
+    { "Commands" = "docs/sc-starter/commands.md" },
+  ] },
+  { "Code-alongs" = [
+    "examples/README.md",
+    { "Topic model in Python" = "examples/python/python-topic-model/README.md" },
+    { "Topic model in R" = "examples/r/r-topic-model/README.md" },
+    { "Segregation model in R" = "examples/r/r-segregation/README.md" },
+    { "Text embeddings on a GPU" = "examples/python/python-embeddings/README.md" },
+    { "Text classifier on a GPU" = "examples/python/python-classifier/README.md" },
+    { "BERTopic on a GPU" = "examples/python/python-bertopic/README.md" },
+    { "Runs longer than the time limit" = "examples/python/python-long-run/README.md" },
+  ] },
+  { "Reference" = [
+    "docs/reference/README.md",
+    { "Cheat sheet" = "docs/reference/cheat-sheet.md" },
+    { "The cluster at a glance" = "docs/reference/cluster-at-a-glance.md" },
+    { "Keep your account tidy" = "docs/reference/keep-your-account-tidy.md" },
+    { "Troubleshooting" = "docs/reference/troubleshooting.md" },
+    { "Glossary" = "docs/reference/glossary.md" },
+  ] },
+]
+
+[project.theme]
+language = "en"
+# The draft notice at the top of every page.
+custom_dir = "overrides"
+# The fonts come from the site itself, see the stylesheet.
+font = false
+features = [
+  "content.code.copy",
+  "content.code.annotate",
+  "content.tabs.link",
+  "content.tooltips",
+  "navigation.sections",
+  "navigation.footer",
+  "navigation.indexes",
+  "navigation.path",
+  "toc.follow",
+]
+
+# The Gruvbox tones of the stylesheet, light and dark.
+[[project.theme.palette]]
+media = "(prefers-color-scheme: light)"
+scheme = "gruvbox-light"
+primary = "custom"
+accent = "custom"
+toggle.icon = "lucide/moon"
+toggle.name = "Switch to dark mode"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: dark)"
+scheme = "gruvbox-dark"
+primary = "custom"
+accent = "custom"
+toggle.icon = "lucide/sun"
+toggle.name = "Switch to light mode"
+
+# Listing extensions replaces Zensical's defaults, so only these apply; the
+# defaults would also read `$...$` as formulas and `-->` as arrows.
+[project.markdown_extensions.toc]
+permalink = true
+
+[project.markdown_extensions.tables]
+
+# Numbered lists start at the number they are written with.
+[project.markdown_extensions.sane_lists]
+
+# Boxes: !!! check, ??? fix "If it didn't work", and the GitHub alerts
+# such as > [!WARNING] in the READMEs.
+[project.markdown_extensions.admonition]
+
+[project.markdown_extensions.pymdownx.details]
+
+[project.markdown_extensions.pymdownx.quotes]
+callouts = true
+
+# The glossary as tooltips; build.py writes the file from docs/reference/glossary.md.
+[project.markdown_extensions.abbr]
+
+[project.markdown_extensions.pymdownx.snippets]
+base_path = ["site/_tooltips"]
+auto_append = ["glossary.md"]
+check_paths = true
+
+# Markdown inside the cards of the start page.
+[project.markdown_extensions.attr_list]
+
+[project.markdown_extensions.md_in_html]
+
+# Python and R side by side, chosen once for every page.
+[project.markdown_extensions.pymdownx.tabbed]
+alternate_style = true
+
+[project.markdown_extensions.pymdownx.highlight]
+pygments_lang_class = true
+
+[project.markdown_extensions.pymdownx.superfences]
+custom_fences = [
+  { name = "mermaid", class = "mermaid", format = "pymdownx.superfences.fence_code_format" },
+]
+
+# - [ ] in the checklist.
+[project.markdown_extensions.pymdownx.tasklist]
+custom_checkbox = true
+
+# ~~struck through~~, and web addresses written out become links.
+[project.markdown_extensions.pymdownx.tilde]
+subscript = false
+
+[project.markdown_extensions.pymdownx.magiclink]

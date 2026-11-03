@@ -1,0 +1,25 @@
+# Environments and caches; uv and renv rebuild them from the lock files
+.venv/
+__pycache__/
+**/renv/library/
+**/renv/staging/
+
+# What R, RStudio and macOS leave behind
+.Rhistory
+.RData
+.Rproj.user/
+.DS_Store
+
+# Slurm output files
+*.out
+
+# What the examples produce; their READMEs show the expected output
+examples/*/*/results/
+examples/*/*/failed.txt
+
+# The website: copied pages, tooltips, the built site, downloads and Zensical's cache
+site/_src/
+site/_tooltips/
+site/_site/
+site/_cache/
+site/.cache/

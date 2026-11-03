@@ -1,0 +1,6 @@
+Rscript run.R 5
+Rscript run.R 10
+Rscript run.R 15
+Rscript run.R 20
+Rscript run.R 25
+Rscript run.R 30

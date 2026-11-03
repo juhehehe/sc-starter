@@ -1,0 +1,26 @@
+[project]
+name = "python-bertopic"
+version = "0.1.0"
+description = "Topics in parliamentary questions with BERTopic, embeddings on a GPU"
+requires-python = ">=3.12"
+# The versions this example was tested with. PyTorch from PyPI brings
+# CUDA 13, which needs GPU driver 580 or newer and does not run on V100
+# cards. run.py uses UMAP, HDBSCAN and scikit-learn directly, so they are
+# named too.
+dependencies = [
+    "bertopic==0.17.4",
+    "hdbscan==0.8.44",
+    "scikit-learn==1.9.1",
+    "sentence-transformers==6.1.0",
+    "torch==2.14.1",
+    "umap-learn==0.5.12",
+]
+
+[tool.uv]
+# The cluster, Windows and Apple silicon Macs. PyTorch has no current
+# builds for Intel Macs, so they are left out.
+environments = [
+    "sys_platform == 'linux' and platform_machine == 'x86_64'",
+    "sys_platform == 'win32' and platform_machine == 'AMD64'",
+    "sys_platform == 'darwin' and platform_machine == 'arm64'",
+]

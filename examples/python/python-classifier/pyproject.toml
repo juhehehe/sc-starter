@@ -1,0 +1,24 @@
+[project]
+name = "python-classifier"
+version = "0.1.0"
+description = "Teach a small language model on a GPU which ministry a parliamentary question goes to"
+requires-python = ">=3.12"
+# The versions this example was tested with. PyTorch from PyPI brings
+# CUDA 13, which needs GPU driver 580 or newer and does not run on V100
+# cards. The Trainer of transformers needs accelerate; scikit-learn splits
+# the data and scores the predictions.
+dependencies = [
+    "accelerate==1.15.0",
+    "scikit-learn==1.9.1",
+    "torch==2.14.1",
+    "transformers==5.20.2",
+]
+
+[tool.uv]
+# The cluster, Windows and Apple silicon Macs. PyTorch has no current
+# builds for Intel Macs, so they are left out.
+environments = [
+    "sys_platform == 'linux' and platform_machine == 'x86_64'",
+    "sys_platform == 'win32' and platform_machine == 'AMD64'",
+    "sys_platform == 'darwin' and platform_machine == 'arm64'",
+]

@@ -1,0 +1,9 @@
+#!/bin/sh
+# Stand-in for squeue: prints the lines about the job given with --jobs
+# from the file `queue` in LOCAL_CLUSTER_SLURM, as a test wrote them.
+for arg; do
+    case $arg in --jobs=*) job=${arg#--jobs=} ;; esac
+done
+[ -f "$LOCAL_CLUSTER_SLURM/queue" ] || exit 0
+grep "^$job[_|]" "$LOCAL_CLUSTER_SLURM/queue"
+exit 0

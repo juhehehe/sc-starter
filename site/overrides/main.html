@@ -1,0 +1,13 @@
+{#- The draft notice on every page, and no search engine lists the
+    site while it is a draft. Both go when the guide is published. -#}
+{% extends "base.html" %}
+
+{% block extrahead %}
+  <meta name="robots" content="noindex">
+{% endblock %}
+
+{% block announce %}
+  This guide is a draft, and not every step is tested on the cluster yet.
+  Please report what is unclear or wrong as an
+  <a href="https://github.com/juhehehe/sc-starter/issues">issue on GitHub</a>.
+{% endblock %}

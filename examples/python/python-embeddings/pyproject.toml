@@ -1,0 +1,22 @@
+[project]
+name = "python-embeddings"
+version = "0.1.0"
+description = "Embeddings of parliamentary questions on a GPU: find similar ones, group them"
+requires-python = ">=3.12"
+# The versions this example was tested with. PyTorch from PyPI brings
+# CUDA 13, which needs GPU driver 580 or newer and does not run on V100
+# cards.
+dependencies = [
+    "scikit-learn==1.9.1",
+    "sentence-transformers==6.1.0",
+    "torch==2.14.1",
+]
+
+[tool.uv]
+# The cluster, Windows and Apple silicon Macs. PyTorch has no current
+# builds for Intel Macs, so they are left out.
+environments = [
+    "sys_platform == 'linux' and platform_machine == 'x86_64'",
+    "sys_platform == 'win32' and platform_machine == 'AMD64'",
+    "sys_platform == 'darwin' and platform_machine == 'arm64'",
+]
