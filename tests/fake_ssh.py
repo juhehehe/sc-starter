@@ -36,7 +36,7 @@ def main() -> int:
         os.kill(os.getppid(), signal.SIGINT)
     if "stdout_file" in reply:
         sys.stdout.buffer.write(Path(reply["stdout_file"]).read_bytes())
-    sys.stderr.write(reply.get("stderr", ""))
+    sys.stderr.buffer.write(reply.get("stderr", "").encode())
     return reply.get("code", 0)
 
 

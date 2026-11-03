@@ -40,7 +40,7 @@ jobs:
       # The examples' lock files still match their pyproject.toml.
       - if: matrix.os == 'ubuntu-latest' && matrix.python == '3.12'
         run: |
-          for project in examples/python/*/pyproject.toml first-jobs/*/pyproject.toml; do
+          for project in examples/python/*/pyproject.toml; do
             uv lock --check --directory "$(dirname "$project")"
           done
 

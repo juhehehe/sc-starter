@@ -89,6 +89,20 @@ def test_ssh_failures_point_to_the_fix(fake_ssh, stderr, hint):
     assert stderr in str(error.value)
 
 
+def test_ssh_failures_drop_the_carriage_returns_of_ssh(fake_ssh):
+    fake_ssh.reply(
+        "sc-login",
+        stderr="@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @\r\n"
+        "Host key verification failed.\r\n",
+        code=255,
+    )
+
+    with pytest.raises(Problem) as error:
+        ssh.run("sc-login", "true")
+
+    assert "\r" not in str(error.value)
+
+
 def test_failing_remote_command_keeps_exit_code_and_message(fake_ssh):
     fake_ssh.reply("sc-login", stderr="ls: cannot access 'x'", code=2)
 

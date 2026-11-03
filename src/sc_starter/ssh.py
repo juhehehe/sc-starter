@@ -118,7 +118,8 @@ def _call(
             "The ssh command was not found. On Windows, add the optional "
             "feature 'OpenSSH Client'; macOS and Linux come with it."
         ) from None
-    stderr = result.stderr.decode("utf-8", errors="replace")
+    # ssh ends its own messages with \r\n, on every system.
+    stderr = result.stderr.decode("utf-8", errors="replace").replace("\r\n", "\n")
     if result.returncode == SSH_FAILED:
         raise Problem(explain_ssh_failure(host, stderr))
     if problems and result.returncode in problems:

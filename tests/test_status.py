@@ -295,7 +295,9 @@ def test_log_into_a_file_on_windows_writes_what_its_code_page_lacks(
     """Windows writes into files and pipes in the ANSI code page, cp1252 here."""
     fake_ssh.reply("sc-export", stdout="Batches: 100%|██| 2/2\n".encode())
     written = io.BytesIO()
-    monkeypatch.setattr(sys, "stdout", io.TextIOWrapper(written, encoding="cp1252"))
+    monkeypatch.setattr(
+        sys, "stdout", io.TextIOWrapper(written, encoding="cp1252", newline="\n")
+    )
 
     assert cli.main(["log", "3"]) == 0
 

@@ -164,6 +164,9 @@ def test_push_names_a_file_it_cannot_read(project, fake_ssh, capsys):
     assert len(fake_ssh.calls) == 1  # only the listing; nothing was sent
 
 
+@pytest.mark.skipif(
+    sys.platform == "win32", reason="chmod cannot take away read access on Windows"
+)
 def test_push_names_a_job_script_it_cannot_read_on_a_second_push(
     project, fake_ssh, capsys
 ):
